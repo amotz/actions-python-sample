@@ -1,0 +1,41 @@
+name: Python Build
+
+on: [push]
+
+jobs:
+  lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.6
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.6
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip pipenv flake8
+        pipenv install --system
+    - name: Lint with flake8
+      run: |
+        flake8 app tests
+
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.6
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.6
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip pipenv pytest
+        pipenv install --system
+    - name: Test with pytest
+      run: |
+        pytest
+
