@@ -1,0 +1,17 @@
+service: actions-python-sample
+
+provider:
+  name: aws
+  runtime: python3.6
+  region: ap-northeast-1
+  memorySize: 128
+
+package:
+  exclude:
+    - "**"
+  include:
+    - app/**.py
+
+functions:
+  fizzbuzz:
+    handler: app/handler.lambda_handler
