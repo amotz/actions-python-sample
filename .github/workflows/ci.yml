@@ -4,24 +4,30 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python 3.6
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.6
-    - name: Install dependencies
-      run: |
-        pip install --upgrade pip pipenv
-        pipenv sync --dev
-    - name: Lint with flake8
-      run: |
-        pipenv run flake8 app tests
-    - name: Test with pytest
-      run: |
-        pipenv run pytest
-
-
+      - uses: actions/checkout@v1
+      - name: Set up Python 3.6
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip pipenv
+          pipenv sync --dev
+      - name: Lint with flake8
+        run: |
+          pipenv run flake8 app tests
+      - name: Test with pytest
+        run: |
+          pipenv run pytest
+      - name: Notify result to slack
+        uses: homoluctus/slatify@master
+        if: always()
+        with:
+          type: ${{ job.status }}
+          job_name: "*Python Build(lint/test)*"
+          channel: '#sandbox-amotz'
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
