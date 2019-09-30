@@ -1,4 +1,5 @@
 def lambda_handler(event, context):
+    print(event)
     num = event['num']
 
     return fizzbuzz(num)
